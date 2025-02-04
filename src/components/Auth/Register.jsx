@@ -34,7 +34,7 @@ const Register = () => {
       {error && <p className="error">{error}</p>}
       {success && <p className="success">Registration successful!</p>}
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
+        <div className="form-group2">
           <label htmlFor="email">Email Address</label>
           <input
             type="email"
@@ -78,11 +78,7 @@ const Register = () => {
         </div>
       </form>
       <div className="social-login">
-        <p>or sign in with</p>
-        <button className="google-button">Continue with Google</button>
-      </div>
-      <div className="create-account">
-        <p>Create an account</p>
+        <button className="google-button2">Sign in</button>
       </div>
     </div>
   );
