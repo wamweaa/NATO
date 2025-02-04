@@ -6,6 +6,7 @@ import RegisterPage from './Pages/RegisterPage'
 import UserDashboardPage from './Pages/UserDashboardPage';
 import AdminDashboardPage from './Pages/AdminDashboardPage';
 import UserProfilePage from './Pages/UserProfilePage'
+import DashboardForm from './Dashboard/DashboardForm';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path='/user/dashboard' element={<UserDashboardPage/>}/>
           <Route path='/admin/dashboard' element={<AdminDashboardPage/>}/>
           <Route path='/profile' element={<UserProfilePage/>}/>
+          <Route path='/DashboardForm' element={<DashboardForm/>}/>
         </Routes>
       </Router>
 

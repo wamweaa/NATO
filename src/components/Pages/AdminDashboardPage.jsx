@@ -1,6 +1,6 @@
 import React from 'react';
 import Navbar from '../Sharedc/Navbar';
-import Sidebar from '../Sharedc/Sidebar';
+
 import AdminDashboard from '../Dashboard/AdminDashboard';
 import Footer from '../Sharedc/Footer';
 
@@ -9,7 +9,7 @@ const AdminDashboardPage = () => {
     <div>
       <Navbar />
       <div className="dashboard-layout">
-        <Sidebar />
+
         <main className="dashboard-content">
           <AdminDashboard />
         </main>
