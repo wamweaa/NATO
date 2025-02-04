@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { isAuthenticated, getToken } from '../Services/auth';
 import RecordTable from '../Sharedc/RecordTable';
 import Statistics from '../Sharedc/Statistics';
+import Sidebar from '../Sharedc/Sidebar';
 
 const UserDashboard = () => {
   const [userDetails, setUserDetails] = useState({
@@ -19,7 +20,7 @@ const UserDashboard = () => {
     // Check if the user is authenticated
     if (!isAuthenticated()) {
       alert('You must log in first.');
-      window.location.href = '/login'; // Redirect to login if not authenticated
+      window.location.href = '/login';
       return;
     }
 
@@ -78,47 +79,69 @@ const UserDashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <h1>User Dashboard</h1>
-      {error ? (
-        <p className="error">{error}</p>
-      ) : (
-        <>
-          <h2>Welcome, {userDetails.username}</h2>
-          <p>Email: {userDetails.email}</p>
-          <p>Role: {userDetails.role}</p>
+      <Sidebar />
 
-          <div className="filter-bar">
-            <label>
-              Month:
-              <select name="month" value={filters.month} onChange={handleFilterChange}>
-                <option value="">All</option>
-                {[...Array(12)].map((_, index) => (
-                  <option key={index} value={index + 1}>
-                    {new Date(0, index).toLocaleString('default', { month: 'long' })}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              Year:
-              <select name="year" value={filters.year} onChange={handleFilterChange}>
-                <option value="">All</option>
-                {[...Array(5)].map((_, index) => {
-                  const year = new Date().getFullYear() - index;
-                  return (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  );
-                })}
-              </select>
-            </label>
+      <div className="main-content">
+        <header className="header">
+          <h1>Welcome to KNUT Dashboard</h1>
+          <div className="user-info">
+            <span>Logged in as: {userDetails.username}</span>
+            <img src="https://via.placeholder.com/40" alt="User Avatar" className="avatar" />
           </div>
+        </header>
 
-          <RecordTable records={filteredRecords} />
-          <Statistics records={filteredRecords} />
-        </>
-      )}
+        <section className="content">
+          {error ? (
+            <div className="card">
+              <p className="error">{error}</p>
+            </div>
+          ) : (
+            <>
+              <div className="card">
+                <h2>User Information</h2>
+                <p>Email: {userDetails.email}</p>
+                <p>Role: {userDetails.role}</p>
+
+                <div className="filter-bar">
+                  <label>
+                    Month:
+                    <select name="month" value={filters.month} onChange={handleFilterChange}>
+                      <option value="">All</option>
+                      {[...Array(12)].map((_, index) => (
+                        <option key={index} value={index + 1}>
+                          {new Date(0, index).toLocaleString('default', { month: 'long' })}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    Year:
+                    <select name="year" value={filters.year} onChange={handleFilterChange}>
+                      <option value="">All</option>
+                      {[...Array(5)].map((_, index) => {
+                        const year = new Date().getFullYear() - index;
+                        return (
+                          <option key={year} value={year}>
+                            {year}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </label>
+                </div>
+              </div>
+
+              <div className="card">
+                <RecordTable records={filteredRecords} />
+              </div>
+
+              <div className="card">
+                <Statistics records={filteredRecords} />
+              </div>
+            </>
+          )}
+        </section>
+      </div>
     </div>
   );
 };

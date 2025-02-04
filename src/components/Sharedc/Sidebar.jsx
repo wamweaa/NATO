@@ -4,14 +4,20 @@ import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
   return (
-    <aside className="sidebar">
-      <ul>
-        <li><Link to="/user/dashboard">User Dashboard</Link></li>
-        <li><Link to="/admin-dashboard">Admin Dashboard</Link></li>
-        <li><Link to="/financial-records">Financial Records</Link></li>
-        <li><Link to="/user-management">User Management</Link></li>
-      </ul>
-    </aside>
+    <div className="sidebar">
+    <div className="logo">KNUT</div>
+    <ul className="nav">
+      <li>
+        <a href="#" className="active">Dashboard</a>
+      </li>
+      <li><Link to="/DashboardForm">Share and loans</Link></li>
+      <li><a href="#">Transactions</a></li>
+      <li><a href="#">Bills</a></li>
+      <li><a href="#">Withdraw/Deposit</a></li>
+      <li><a href="#">Reports</a></li>
+      <li><a href="#">Profile Settings</a></li>
+    </ul>
+  </div>
   );
 };
 
