@@ -1,54 +1,51 @@
+
+
+
 import React, { useEffect, useState } from 'react';
 import { isAuthenticated, getToken } from '../Services/auth';
-import RecordTable from '../Sharedc/RecordTable';
-import Statistics from '../Sharedc/Statistics';
 import Sidebar from '../Sharedc/Sidebar';
 
 const UserDashboard = () => {
   const [userDetails, setUserDetails] = useState({
-    username: '',
+    name: '',
     email: '',
-    role: '',
+    accountType: '',
+    tscNumber: '',
   });
-  const [records, setRecords] = useState([]);
-  const [filteredRecords, setFilteredRecords] = useState([]);
+  const [loans, setLoans] = useState([]);
+  const [transactions, setTransactions] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({ month: '', year: '' });
 
   useEffect(() => {
-    // Check if the user is authenticated
     if (!isAuthenticated()) {
       alert('You must log in first.');
       window.location.href = '/login';
       return;
     }
 
-    const fetchUserDetails = async () => {
+    const fetchUserData = async () => {
       try {
         const token = getToken();
         const userResponse = await fetch('http://127.0.0.1:5000/api/user/details', {
           headers: { Authorization: `Bearer ${token}` },
         });
-
-        if (!userResponse.ok) {
-          throw new Error(`Error ${userResponse.status}: ${userResponse.statusText}`);
-        }
-
+        
+        if (!userResponse.ok) throw new Error(`Error ${userResponse.status}`);
         const userData = await userResponse.json();
         setUserDetails(userData);
 
-        const recordsResponse = await fetch('http://127.0.0.1:5000/api/records', {
+        const loansResponse = await fetch('http://127.0.0.1:5000/api/loans', {
           headers: { Authorization: `Bearer ${token}` },
         });
+        if (!loansResponse.ok) throw new Error(`Error ${loansResponse.status}`);
+        setLoans(await loansResponse.json());
 
-        if (!recordsResponse.ok) {
-          throw new Error(`Error ${recordsResponse.status}: ${recordsResponse.statusText}`);
-        }
-
-        const recordsData = await recordsResponse.json();
-        setRecords(recordsData);
-        setFilteredRecords(recordsData);
+        const transactionsResponse = await fetch('http://127.0.0.1:5000/api/transactions', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!transactionsResponse.ok) throw new Error(`Error ${transactionsResponse.status}`);
+        setTransactions(await transactionsResponse.json());
       } catch (err) {
         setError('Failed to fetch data. Please try again.');
       } finally {
@@ -56,90 +53,61 @@ const UserDashboard = () => {
       }
     };
 
-    fetchUserDetails();
+    fetchUserData();
   }, []);
 
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters({ ...filters, [name]: value });
-
-    const filtered = records.filter((record) => {
-      const recordDate = new Date(record.date);
-      const matchesMonth = filters.month ? recordDate.getMonth() + 1 === parseInt(filters.month) : true;
-      const matchesYear = filters.year ? recordDate.getFullYear() === parseInt(filters.year) : true;
-      return matchesMonth && matchesYear;
-    });
-
-    setFilteredRecords(filtered);
-  };
-
-  if (loading) {
-    return <div className="dashboard-container">Loading...</div>;
-  }
+  if (loading) return <div className="dashboard-container">Loading...</div>;
 
   return (
     <div className="dashboard-container">
       <Sidebar />
-
       <div className="main-content">
         <header className="header">
-          <h1>Welcome to KNUT Dashboard</h1>
-          <div className="user-info">
-            <span>Logged in as: {userDetails.username}</span>
-            <img src="https://via.placeholder.com/40" alt="User Avatar" className="avatar" />
-          </div>
+          <h2>Hello {userDetails.name}</h2>
+          <p>{new Date().toDateString()}</p>
         </header>
 
-        <section className="content">
-          {error ? (
-            <div className="card">
-              <p className="error">{error}</p>
-            </div>
-          ) : (
-            <>
-              <div className="card">
-                <h2>User Information</h2>
-                <p>Email: {userDetails.email}</p>
-                <p>Role: {userDetails.role}</p>
+        <section className="user-info">
+          <h3>Account Details</h3>
+          <p><strong>Account Name:</strong> {userDetails.name}</p>
+          <p><strong>Account Type:</strong> {userDetails.accountType}</p>
+          <p><strong>Email:</strong> {userDetails.email}</p>
+          <p><strong>TSC Number:</strong> {userDetails.tscNumber}</p>
+        </section>
 
-                <div className="filter-bar">
-                  <label>
-                    Month:
-                    <select name="month" value={filters.month} onChange={handleFilterChange}>
-                      <option value="">All</option>
-                      {[...Array(12)].map((_, index) => (
-                        <option key={index} value={index + 1}>
-                          {new Date(0, index).toLocaleString('default', { month: 'long' })}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label>
-                    Year:
-                    <select name="year" value={filters.year} onChange={handleFilterChange}>
-                      <option value="">All</option>
-                      {[...Array(5)].map((_, index) => {
-                        const year = new Date().getFullYear() - index;
-                        return (
-                          <option key={year} value={year}>
-                            {year}
-                          </option>
-                        );
-                      })}
-                    </select>
-                  </label>
-                </div>
-              </div>
+        <section className="cards-container">
+          <div className="card">
+            <h4>Total Loans</h4>
+            <p>KES {loans.reduce((acc, loan) => acc + loan.amount, 0)}</p>
+          </div>
+          <div className="card">
+            <h4>Interest Earned</h4>
+            <p>KES 20,000</p>
+          </div>
+        </section>
 
-              <div className="card">
-                <RecordTable records={filteredRecords} />
-              </div>
-
-              <div className="card">
-                <Statistics records={filteredRecords} />
-              </div>
-            </>
-          )}
+        <section className="transactions">
+          <h3>Loan Progress</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Transaction Type</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              {transactions.map((transaction, index) => (
+                <tr key={index}>
+                  <td>{transaction.date}</td>
+                  <td>{transaction.status}</td>
+                  <td>{transaction.type}</td>
+                  <td>KES {transaction.amount}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </section>
       </div>
     </div>
