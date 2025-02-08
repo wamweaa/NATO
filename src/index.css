@@ -1,233 +1,172 @@
-/* General Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f8;
-    height: 100vh;
-    overflow: hidden;
-  }
-  
-  /* Dashboard Layout */
-  .dashboard-container {
-    display: flex;
-    height: 100vh; /* Full screen height */
-    width: 100vw;  /* Full screen width */
-  }
-  
-  /* Sidebar */
-  .sidebar {
-    width: 250px;
-    height: 100vh; /* Full height */
-    background-color: #000000;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px 0;
-    position: fixed; /* Keep sidebar fixed */
-    left: 0;
-    top: 0;
-  }
-  
-  .sidebar .logo {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #ecf0f1;
-  }
-  
-  .sidebar .nav {
-    list-style: none;
-    width: 100%;
-    text-align: left;
-  }
-  
-  .sidebar .nav li {
-    margin: 10px 0;
-  }
-  
-  .sidebar .nav a {
-    color: #ecf0f1;
-    text-decoration: none;
-    font-size: 16px;
-    display: block;
-    padding: 10px 20px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .sidebar .nav a:hover,
-  .sidebar .nav a.active {
-    background-color: #37ba42;
-    border-radius: 5px;
-  }
-  
-  /* Main Content */
-  .main-content {
-    flex: 1;
-    margin-left: 250px; /* Matches the sidebar width */
-    padding: 20px;
-    height: 100vh; /* Full height */
-    overflow-y: auto; /* Enable scrolling for overflow content */
-    background-color: #f4f6f8;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* Header */
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding: 10px;
-    background-color: #ffffff;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-  }
-  
-  .header h1 {
-    font-size: 22px;
-    color: #333;
-  }
-  
-  .user-info {
-    display: flex;
-    align-items: center;
-  }
-  
-  .user-info span {
-    margin-right: 10px;
-    color: #666;
-  }
-  
-  .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-  
-  /* Content Layout */
-  .content {
-    flex-grow: 1; /* Allow content to fill available space */
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-  }
-  
-  /* Cards */
-  .card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .card h2 {
-    margin-bottom: 10px;
-    color: #333;
-  }
-  
-  .card ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .card li {
-    margin-bottom: 5px;
-    color: #555;
-  }
-  
-  /* Responsive Design */
-  @media screen and (max-width: 768px) {
-    .sidebar {
-      width: 200px;
-    }
-  
-    .main-content {
-      margin-left: 200px;
-    }
-  
-    .content {
-      grid-template-columns: 1fr;
-    }
-  }
-  
-  @media screen and (max-width: 480px) {
-    .sidebar {
-      width: 100px;
-    }
-  
-    .sidebar .nav a {
-      font-size: 14px;
-      padding: 8px;
-    }
-  
-    .main-content {
-      margin-left: 100px;
-      padding: 10px;
-    }
-  
-    .header h1 {
-      font-size: 18px;
-    }
-  }
-  .dashboard-form {
-    max-width: 800px;
-    margin: auto;
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  h2 {
-    color: #333;
-    margin-bottom: 10px;
-  }
-  
-  .form-group {
-    margin-bottom: 10px;
-  }
-  
-  .form-group label {
-    display: block;
-    font-weight: bold;
-  }
-  
-  input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  table, th, td {
-    border: 1px solid #ddd;
-  }
-  
-  th, td {
-    padding: 8px;
-    text-align: center;
-  }
-  
-  button {
-    background: blue;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
+.login-container {
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type="email"],
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.login-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.login-button:hover {
+  background-color: #0056b3;
+}
+
+.social-login {
+  margin-top: 20px;
+}
+
+.google-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #db4437;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.google-button:hover {
+  background-color: #c1351d;
+}
+
+.create-account {
+  margin-top: 20px;
+}
+
+.create-account p {
+  color: #007bff;
+  cursor: pointer;
+}
+
+.create-account p:hover {
+  text-decoration: underline;
+}
+
+.error {
+  color: red;
+  margin-bottom: 15px;
+}
+.password-group {
+  position: relative;
+}
+
+.password-input-container {
+  position: relative;
+}
+
+.password-input-container input {
+  width: 100%;
+  padding-right: 40px; /* Add space for the eye icon */
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 70%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #777;
+}
+
+.password-toggle:hover {
+  color: #333;
+}
+
+.auth-container {
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+.form-group2 {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type="email"],
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.social-login {
+  margin-top: 20px;
+}
+
+.google-button2 {
+  width: 100%;
+  padding: 10px;
+  background-color: hsl(86, 81%, 50%);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.google-button2:hover {
+  background-color: hwb(108 22% 0%);
+}
+
+.create-account {
+  margin-top: 20px;
+}
+
+.create-account p {
+  color: #007bff;
+  cursor: pointer;
+}
+
+.create-account p:hover {
+  text-decoration: underline;
+}
+
+.error {
+  color: red;
+  margin-bottom: 15px;
+}
