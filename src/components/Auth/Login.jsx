@@ -2,12 +2,21 @@ import { login } from "../Services/api";
 import { saveToken } from "../Services/auth";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import React, { useState } from "react";
+import {
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Button,
+  Typography,
+  Paper,
+  Box,
+} from "@mui/material";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [tscNumber, setTscNumber] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // show password
+  const [showPassword, setShowPassword] = useState(false);
   const [keepSignedIn, setKeepSignedIn] = useState(false);
   const [error, setError] = useState(null);
 
@@ -15,93 +24,97 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await login({ email, tscNumber, password });
-      saveToken(response.data.token); // Save the token to localStorage
+      saveToken(response.data.token);
 
-      const userRole = response.data.role; // Assuming the API response includes the user role
-      if (userRole === "admin") {
-        window.location.href = "/admin/dashboard";
-      } else {
-        window.location.href = "/user/dashboard";
-      }
+      const userRole = response.data.role;
+      window.location.href =
+        userRole === "admin" ? "/admin/dashboard" : "/user/dashboard";
     } catch (err) {
-      setError(
-        err.response?.data?.message || "Login failed. Please try again."
-      );
+      setError(err.response?.data?.message || "Login failed. Please try again.");
     }
-  };
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
   };
 
   return (
-    <div className="login-container">
-      <h1>KNUT</h1>
-      {error && <p className="error">{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="email">Email Address</label>
-          <input
+    <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+      <Paper elevation={3} sx={{ p: 4, width: 400, textAlign: "center" }}>
+        <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2, color:"green" }}>
+          KNUT
+        </Typography>
+        {error && <Typography color="error">{error}</Typography>}
+        <form onSubmit={handleSubmit}>
+          <TextField
+            fullWidth
+            label="Email Address"
             type="email"
-            id="email"
-            placeholder="johndoe@email.com"
+            variant="outlined"
+            margin="normal"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-        </div>
-        <div className="form-group">
-          <label htmlFor="tsc">TSC Number</label>
-          <input
+          <TextField
+            fullWidth
+            label="TSC Number"
             type="text"
-            id="tsc"
-            placeholder="47664544"
+            variant="outlined"
+            margin="normal"
             value={tscNumber}
             onChange={(e) => setTscNumber(e.target.value)}
             required
           />
-        </div>
-        <div className="form-group password-group">
-          <label htmlFor="password">Password</label>
-          <div className="password-input-conatiner">
-            <input
-              type={showPassword ? "text" : "password"} // Toggle between text and password
-              id="password"
-              placeholder=" Password"
+          <Box display="flex" alignItems="center" position="relative">
+            <TextField
+              fullWidth
+              label="Password"
+              type={showPassword ? "text" : "password"}
+              variant="outlined"
+              margin="normal"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
             <span
-              className="password-toggle"
-              onClick={togglePasswordVisibility}
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: "absolute",
+                right: 10,
+                cursor: "pointer",
+                top: "50%",
+                transform: "translateY(-50%)",
+              }}
             >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}{" "}
-              {/* Toggle eye icon */}
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
             </span>
-          </div>
-        </div>
-        <div className="form-group">
-          <label>
-            <input
-              type="checkbox"
-              checked={keepSignedIn}
-              onChange={(e) => setKeepSignedIn(e.target.checked)}
-            />{" "}
-            Keep me signed in
-          </label>
-        </div>
-        <button type="submit" className="login-button">
-          Login
-        </button>
-      </form>
-      <div className="social-login">
-        <p>or sign in with</p>
-        <button className="google-button">Continue with Google</button>
-      </div>
-      <div className="create-account">
-        <p>Create an account</p>
-      </div>
-    </div>
+          </Box>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={keepSignedIn}
+                onChange={(e) => setKeepSignedIn(e.target.checked)}
+                color="primary"
+              />
+            }
+            label="Keep me signed in"
+          />
+          <Button type="submit" fullWidth variant="contained" sx={{ mt: 2, backgroundColor:"green" }}>
+            Login
+          </Button>
+        </form>
+        <Typography variant="body2" sx={{ my: 2 }}>
+          or sign in with
+        </Typography>
+        <Button
+          fullWidth
+          variant="outlined"
+          sx={{ textTransform: "none", mb: 2 }}
+        >
+          Continue with Google
+        </Button>
+        <Typography variant="body2">
+          Don't have an account? <a href="/register">Create one</a>
+        </Typography>
+      </Paper>
+    </Box>
   );
 };
 

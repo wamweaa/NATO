@@ -1,16 +1,17 @@
 import React from 'react';
-import Navbar from '../Sharedc/Navbar';
-import Login from '../Auth/Login';
-import Footer from '../Sharedc/Footer';
 
+import Login from '../Auth/Login';
+
+import { Link } from 'react-router-dom';
 const LoginPage = () => {
   return (
     <div>
-      <Navbar />
       <main>
         <Login />
       </main>
-      <Footer />
+      <div>
+        <p>if you dont have an account <Link to="/register">Register</Link></p>
+      </div>
     </div>
   );
 };
