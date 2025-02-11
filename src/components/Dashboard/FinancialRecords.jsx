@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { getRecords, addRecords, deleteRecords } from '../Services/api';
-import RecordTable from '../Sharedc/RecordTable';
+import React, { useEffect, useState } from "react";
+import { getRecords, addRecords, deleteRecords } from "../Services/api";
+import RecordTable from "../Sharedc/RecordTable";
 
 const FinancialRecords = () => {
   const [records, setRecords] = useState([]);
   const [newRecord, setNewRecord] = useState({
-    month: '',
-    year: '',
+    month: "",
+    year: "",
     paid_in: 0,
     balance: 0,
     loaned: 0,
@@ -16,26 +16,28 @@ const FinancialRecords = () => {
   });
   const [error, setError] = useState(null);
 
+  // Fetch records from API
   useEffect(() => {
     const fetchRecords = async () => {
       try {
         const response = await getRecords();
         setRecords(response.data);
       } catch (err) {
-        setError('Failed to fetch records.');
+        setError("Failed to fetch records.");
       }
     };
 
     fetchRecords();
   }, []);
 
+  // Add a new record
   const handleAddRecord = async () => {
     try {
       const response = await addRecords(newRecord);
-      setRecords([...records, response.data]);
+      setRecords([...records, response.data]); // Append new record
       setNewRecord({
-        month: '',
-        year: '',
+        month: "",
+        year: "",
         paid_in: 0,
         balance: 0,
         loaned: 0,
@@ -44,16 +46,17 @@ const FinancialRecords = () => {
         interest: 0,
       });
     } catch (err) {
-      setError('Failed to add record.');
+      setError("Failed to add record.");
     }
   };
 
+  // Delete a record
   const handleDeleteRecord = async (id) => {
     try {
       await deleteRecords(id);
       setRecords(records.filter((record) => record.id !== id));
     } catch (err) {
-      setError('Failed to delete record.');
+      setError("Failed to delete record.");
     }
   };
 
@@ -61,7 +64,7 @@ const FinancialRecords = () => {
     <div className="dashboard-container">
       <h1>Financial Records</h1>
       {error && <p className="error">{error}</p>}
-      
+
       {/* Input fields for adding a new record */}
       <input
         type="text"
@@ -113,8 +116,8 @@ const FinancialRecords = () => {
       />
       <button onClick={handleAddRecord}>Add Record</button>
 
-      {/* Pass records to RecordTable component */}
-      <RecordTable records={records} />
+      {/* Pass records to RecordTable */}
+      <RecordTable records={records} handleDeleteRecord={handleDeleteRecord} />
     </div>
   );
 };

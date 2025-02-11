@@ -10,12 +10,10 @@ const Sidebar = () => {
       <li>
         <a href="#" className="active">Dashboard</a>
       </li>
-      <li><Link to="/DashboardForm">Share and loans</Link></li>
-      <li><a href="#">Transactions</a></li>
-      <li><a href="#">Bills</a></li>
-      <li><a href="#">Withdraw/Deposit</a></li>
-      <li><a href="#">Reports</a></li>
-      <li><a href="#">Profile Settings</a></li>
+      <li><Link to="/DashboardForm">Financial records</Link></li>
+      <li><Link to="">User Management</Link></li>
+      <li><Link to=""></Link></li>
+
     </ul>
   </div>
   );

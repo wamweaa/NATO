@@ -1,39 +1,47 @@
-import React from 'react';
+import React from "react";
 
-const RecordTable = ({ records }) => {
-  if (records.length === 0) {
-    return <p>No records available.</p>;
-  }
-
+const RecordTable = ({ records, handleDeleteRecord }) => {
   return (
-    <div className="table-container">
-      <h2>Financial Records</h2>
-      <table>
-        <thead>
-          <tr>
-            {/* Dynamically create table headers based on the keys in the first record */}
-            {Object.keys(records[0]).map((key) => (
-              <th key={key}>{key.toUpperCase()}</th>
-            ))}
-            <th>Actions</th> {/* For Delete button */}
-          </tr>
-        </thead>
-        <tbody>
-          {/* Loop through each record and create table rows */}
-          {records.map((row, index) => (
-            <tr key={index}>
-              {Object.values(row).map((value, idx) => (
-                <td key={idx}>{value}</td>
-              ))}
-              {/* Add a delete button for each row */}
+    <table className="records-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Month</th>
+          <th>Year</th>
+          <th>Paid In</th>
+          <th>Balance</th>
+          <th>Loaned</th>
+          <th>Repaid</th>
+          <th>Shares</th>
+          <th>Interest</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {records.length > 0 ? (
+          records.map((record) => (
+            <tr key={record.id}>
+              <td>{record.id}</td>
+              <td>{record.month}</td>
+              <td>{record.year}</td>
+              <td>{record.paid_in}</td>
+              <td>{record.balance}</td>
+              <td>{record.loaned}</td>
+              <td>{record.repaid}</td>
+              <td>{record.shares}</td>
+              <td>{record.interest}</td>
               <td>
-                <button onClick={() => handleDeleteRecord(row.id)}>Delete</button>
+                <button onClick={() => handleDeleteRecord(record.id)}>Delete</button>
               </td>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="10">No records available.</td>
+          </tr>
+        )}
+      </tbody>
+    </table>
   );
 };
 

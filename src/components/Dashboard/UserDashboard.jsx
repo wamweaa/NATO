@@ -68,10 +68,14 @@ const UserDashboard = () => {
 
         <section className="user-info">
           <h3>Account Details</h3>
-          <p><strong>Name:</strong> {userDetails.name}</p>
-          <p><strong>Email:</strong> {userDetails.email}</p>
-          <p><strong>Role:</strong> {userDetails.role}</p>
-          <p><strong>Account Created:</strong> {new Date(userDetails.created_at).toLocaleDateString()}</p>
+          <p><strong>Name:</strong>
+          {userDetails.name}</p>
+          <p><strong>Email:</strong>
+           {userDetails.email}</p>
+          <p><strong>Role:</strong> 
+          {userDetails.role}</p>
+          <p><strong>Account Created:
+            </strong> {new Date(userDetails.created_at).toLocaleDateString()}</p>
         </section>
 
         <section className="cards-container">
