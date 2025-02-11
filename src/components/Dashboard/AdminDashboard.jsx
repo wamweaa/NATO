@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../Sharedc/Sidebar";
-import { getAllUsers, deleteRecords, getRecords, addRecords } from "../Services/api";
+import { getAllUsers, getRecords, adminAddRecord, adminDeleteRecord } from "../Services/api";
 import RecordTable from "../Sharedc/RecordTable";
 
 const AdminDashboard = () => {
@@ -32,6 +32,26 @@ const AdminDashboard = () => {
     };
     fetchRecords();
   }, []);
+
+  // Handle adding a financial record
+  const handleAddRecord = async (newRecord) => {
+    try {
+      await adminAddRecord(newRecord);
+      setRecords([...records, newRecord]);
+    } catch (err) {
+      setError("Failed to add record.");
+    }
+  };
+
+  // Handle deleting a financial record
+  const handleDeleteRecord = async (id) => {
+    try {
+      await adminDeleteRecord(id);
+      setRecords(records.filter(record => record.id !== id));
+    } catch (err) {
+      setError("Failed to delete record.");
+    }
+  };
 
   return (
     <div className="dashboard-container">
@@ -67,7 +87,6 @@ const AdminDashboard = () => {
                     <th>ID</th>
                     <th>Username</th>
                     <th>Email</th>
-                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -76,21 +95,66 @@ const AdminDashboard = () => {
                       <td>{user.id}</td>
                       <td>{user.username}</td>
                       <td>{user.email}</td>
-                      <td>
-                        <button onClick={() => deleteRecords(user.id)}>Delete</button>
-                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           )}
-          {activeTab === "records" && (
-            <div className="card">
-              <h2>Financial Records</h2>
-              <RecordTable records={records} onDelete={deleteRecords} />
-            </div>
-          )}
+{activeTab === "records" && (
+  <div className="card">
+    <h2>Financial Records</h2>
+
+    {/* Add New Record Form */}
+    <form
+      onSubmit={async (e) => {
+        e.preventDefault();
+        const userId = e.target.user.value;
+        const newRecord = {
+          user_id: userId, // Associate record with selected user
+          month: e.target.month.value,
+          year: e.target.year.value,
+          paid_in: e.target.paid_in.value,
+          balance: e.target.balance.value,
+          loaned: e.target.loaned.value,
+          repaid: e.target.repaid.value,
+          shares: e.target.shares.value,
+          interest: e.target.interest.value,
+        };
+
+        await handleAddRecord(newRecord);
+        e.target.reset();
+      }}
+    >
+      <div className="form-group">
+        {/* Select User Dropdown */}
+        <select name="user" required>
+          <option value="">Select User</option>
+          {users.map((user) => (
+            <option key={user.id} value={user.id}>
+              {user.username} ({user.email})
+            </option>
+          ))}
+        </select>
+        
+        <input type="text" name="month" placeholder="Month" required />
+        <input type="number" name="year" placeholder="Year" required />
+        <input type="number" name="paid_in" placeholder="Paid In" required />
+        <input type="number" name="balance" placeholder="Balance" required />
+        <input type="number" name="loaned" placeholder="Loaned" required />
+        <input type="number" name="repaid" placeholder="Repaid" required />
+        <input type="number" name="shares" placeholder="Shares" required />
+        <input type="number" name="interest" placeholder="Interest" required />
+        <button type="submit">Add Record</button>
+      </div>
+    </form>
+
+    {/* Display Financial Records */}
+    <RecordTable records={records} users={users} onDelete={handleDeleteRecord} />
+  </div>
+)}
+
+
         </section>
       </div>
     </div>

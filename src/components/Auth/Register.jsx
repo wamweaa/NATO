@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { register } from "../Services/api"; // Ensure this function correctly makes a POST request
-
+import {
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Button,
+  Typography,
+  Paper,
+  Box,
+} from "@mui/material";
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

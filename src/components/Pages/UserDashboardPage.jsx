@@ -1,6 +1,6 @@
 import React from 'react';
 import Navbar from '../Sharedc/Navbar';
-import Sidebar from '../Sharedc/Sidebar';
+// import Sidebar from '../Sharedc/Sidebar';
 import UserDashboard from '../Dashboard/UserDashboard';
 import Footer from '../Sharedc/Footer';
 
@@ -9,7 +9,7 @@ const UserDashboardPage = () => {
     <div>
       <Navbar />
       <div className="dashboard-layout">
-        <Sidebar />
+        {/* <Sidebar /> */}
         <main className="dashboard-content">
           <UserDashboard />
         </main>
