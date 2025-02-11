@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { register } from "../Services/api"; // Ensure this function correctly makes a POST request
-import {
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Button,
-  Typography,
-  Paper,
-  Box,
+import { register } from "../Services/api";
+import { 
+  Box, 
+  TextField, 
+  Button, 
+  Typography, 
+  IconButton, 
+  InputAdornment 
 } from "@mui/material";
+
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [tscNumber, setTscNumber] = useState(""); // Correct field name used in payload
+  const [tscNumber, setTscNumber] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
@@ -21,98 +21,116 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null); // Reset error state before submission
+    setError(null);
 
     try {
-      // Send request with correct field names
       const response = await register({
         name,
         email,
-        tsc_number: tscNumber, // Ensure this matches the backend field
+        tsc_number: tscNumber,
         password,
       });
 
       if (response.message === "User registered successfully!") {
         setSuccess(true);
         alert("Registration successful! Please login.");
-        window.location.href = "/login"; // Redirect to login page
+        window.location.href = "/login";
       } else {
         setError(response.message || "Unexpected response from the server.");
       }
     } catch (err) {
-      setError(
-        err.response?.data?.message || "Registration failed. Please try again."
-      );
+      setError(err.response?.data?.message || "Registration failed. Please try again.");
     }
   };
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
   return (
-    <div className="auth-container">
-      <h1>Register</h1>
-      {error && <p className="error">{error}</p>}
-      {success && <p className="success">Registration successful!</p>}
+    <Box 
+      sx={{
+        maxWidth: 400,
+        mx: "auto",
+        mt: 5,
+        p: 3,
+        boxShadow: 3,
+        borderRadius: 2,
+        bgcolor: "white"
+      }}
+    >
+      <Typography variant="h5" sx={{ textAlign: "center", mb: 2 }}>
+        Register
+      </Typography>
+
+      {error && (
+        <Typography color="error" sx={{ mb: 2 }}>
+          {error}
+        </Typography>
+      )}
+      {success && (
+        <Typography color="success.main" sx={{ mb: 2 }}>
+          Registration successful!
+        </Typography>
+      )}
+
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="name">Full Name</label>
-          <input
-            type="text"
-            id="name"
-            placeholder="John Doe"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="email">Email Address</label>
-          <input
-            type="email"
-            id="email"
-            placeholder="johndoe@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="tsc">TSC Number</label>
-          <input
-            type="text"
-            id="tsc"
-            placeholder="47664544"
-            value={tscNumber}
-            onChange={(e) => setTscNumber(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group password-group">
-          <label htmlFor="password">Password</label>
-          <div className="password-input-container">
-            <input
-              type={showPassword ? "text" : "password"}
-              id="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <span
-              className="password-toggle"
-              onClick={togglePasswordVisibility}
-            >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </span>
-          </div>
-        </div>
-        <button type="submit" className="register-button">
+        <TextField
+          fullWidth
+          label="Full Name"
+          variant="outlined"
+          margin="normal"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+        <TextField
+          fullWidth
+          label="Email Address"
+          type="email"
+          variant="outlined"
+          margin="normal"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <TextField
+          fullWidth
+          label="TSC Number"
+          variant="outlined"
+          margin="normal"
+          value={tscNumber}
+          onChange={(e) => setTscNumber(e.target.value)}
+          required
+        />
+        <TextField
+          fullWidth
+          label="Password"
+          type={showPassword ? "text" : "password"}
+          variant="outlined"
+          margin="normal"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </IconButton>
+              </InputAdornment>
+            )
+          }}
+        />
+        <Button
+          fullWidth
+          type="submit"
+          variant="contained"
+          sx={{ mt: 2, bgcolor: "green", color: "white" }}
+        >
           Register
-        </button>
+        </Button>
+        <Typography>
+          have an account <a href="/login">Login</a>
+        </Typography>
       </form>
-    </div>
+    </Box>
   );
 };
 
