@@ -120,6 +120,7 @@ const AdminDashboard = () => {
           repaid: e.target.repaid.value,
           shares: e.target.shares.value,
           interest: e.target.interest.value,
+          category: e.target.category.value,
         };
 
         await handleAddRecord(newRecord);
@@ -136,6 +137,14 @@ const AdminDashboard = () => {
             </option>
           ))}
         </select>
+        {/* user dropdown for category */}
+        <select name="category" required>
+      <option value="">Select Category</option>
+      <option value="savings">Savings</option>
+      <option value="loans">Loans</option>
+      <option value="shares">Shares</option>
+      <option value="interest">Interest</option>
+    </select>
         
         <input type="text" name="month" placeholder="Month" required />
         <input type="number" name="year" placeholder="Year" required />

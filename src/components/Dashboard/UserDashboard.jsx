@@ -12,6 +12,31 @@ const UserDashboard = () => {
   const [financialRecords, setFinancialRecords] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  const handleCategoryChange = (event) => {
+    setSelectedCategory(event.target.value);
+  };
+
+  // Fetch financial records filtered by category
+  const fetchFilteredRecords = async (category) => {
+    try {
+      const token = getToken();
+      const url = category
+        ? `http://127.0.0.1:5000/api/records?category=${category}`
+        : `http://127.0.0.1:5000/api/records`;
+
+      const response = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!response.ok) throw new Error(`Error ${response.status}`);
+      const data = await response.json();
+      setFinancialRecords(data);
+    } catch (err) {
+      setError("Failed to fetch financial records.");
+    }
+  };
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -33,12 +58,7 @@ const UserDashboard = () => {
         setUserDetails(userData);
 
         // Fetch financial records
-        const recordsResponse = await fetch('http://127.0.0.1:5000/api/records', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (!recordsResponse.ok) throw new Error(`Error ${recordsResponse.status}`);
-        const recordsData = await recordsResponse.json();
-        setFinancialRecords(recordsData);
+        fetchFilteredRecords(selectedCategory);
       } catch (err) {
         setError('Failed to fetch data. Please try again.');
       } finally {
@@ -47,7 +67,7 @@ const UserDashboard = () => {
     };
 
     fetchUserData();
-  }, []);
+  }, [selectedCategory]);
 
   if (loading) return <div className="dashboard-loading">Loading...</div>;
 
@@ -64,6 +84,16 @@ const UserDashboard = () => {
           <h2 className="dashboard-title">Hello, {userDetails.name}</h2>
           <p className="dashboard-date">{new Date().toDateString()}</p>
         </header>
+
+        <div className="filter-section">
+        <label>Filter by Category: </label>
+<select onChange={handleCategoryChange} value={selectedCategory}>
+  <option value="">All</option>
+  <option value="Burial and Development Fund">Burial and Development Fund</option>
+  <option value="Education Fund">Education Fund</option>
+</select>
+
+        </div>
 
         <section className="account-info">
           <h3 className="section-title">Account Details</h3>
