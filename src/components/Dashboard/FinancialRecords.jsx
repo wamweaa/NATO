@@ -1,60 +1,47 @@
 import React, { useEffect, useState } from "react";
-import { getRecords, addRecords, deleteRecords } from "../Services/api";
+import Sidebar from "../Sharedc/Sidebar";
+import { getRecords, getAllUsers, adminAddRecord, adminDeleteRecord } from "../Services/api";
 import RecordTable from "../Sharedc/RecordTable";
 
 const FinancialRecords = () => {
+  const [users, setUsers] = useState([]);
   const [records, setRecords] = useState([]);
-  const [newRecord, setNewRecord] = useState({
-    month: "",
-    year: "",
-    paid_in: 0,
-    balance: 0,
-    loaned: 0,
-    repaid: 0,
-    shares: 0,
-    interest: 0,
-  });
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch records from API
   useEffect(() => {
-    const fetchRecords = async () => {
-      try {
-        const response = await getRecords();
-        setRecords(response.data);
-      } catch (err) {
-        setError("Failed to fetch records.");
-      }
-    };
-
-    fetchRecords();
+    fetchData();
   }, []);
 
-  // Add a new record
-  const handleAddRecord = async () => {
+  const fetchData = async () => {
+    setLoading(true);
     try {
-      const response = await addRecords(newRecord);
-      setRecords([...records, response.data]); // Append new record
-      setNewRecord({
-        month: "",
-        year: "",
-        paid_in: 0,
-        balance: 0,
-        loaned: 0,
-        repaid: 0,
-        shares: 0,
-        interest: 0,
-      });
+      const [usersResponse, recordsResponse] = await Promise.all([
+        getAllUsers(),
+        getRecords(),
+      ]);
+      setUsers(usersResponse.data);
+      setRecords(recordsResponse.data);
+    } catch (err) {
+      setError("Failed to fetch data. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddRecord = async (newRecord) => {
+    try {
+      const response = await adminAddRecord(newRecord);
+      setRecords((prevRecords) => [...prevRecords, response.data]);
     } catch (err) {
       setError("Failed to add record.");
     }
   };
 
-  // Delete a record
   const handleDeleteRecord = async (id) => {
     try {
-      await deleteRecords(id);
-      setRecords(records.filter((record) => record.id !== id));
+      await adminDeleteRecord(id);
+      setRecords((prevRecords) => prevRecords.filter((record) => record.id !== id));
     } catch (err) {
       setError("Failed to delete record.");
     }
@@ -62,62 +49,68 @@ const FinancialRecords = () => {
 
   return (
     <div className="dashboard-container">
-      <h1>Financial Records</h1>
-      {error && <p className="error">{error}</p>}
+      <Sidebar />
+      <div className="main-content">
+        <header className="header">
+          <h1>Financial Records</h1>
+        </header>
 
-      {/* Input fields for adding a new record */}
-      <input
-        type="text"
-        placeholder="Month"
-        value={newRecord.month}
-        onChange={(e) => setNewRecord({ ...newRecord, month: e.target.value })}
-      />
-      <input
-        type="number"
-        placeholder="Year"
-        value={newRecord.year}
-        onChange={(e) => setNewRecord({ ...newRecord, year: e.target.value })}
-      />
-      <input
-        type="number"
-        placeholder="Paid In"
-        value={newRecord.paid_in}
-        onChange={(e) => setNewRecord({ ...newRecord, paid_in: e.target.value })}
-      />
-      <input
-        type="number"
-        placeholder="Balance"
-        value={newRecord.balance}
-        onChange={(e) => setNewRecord({ ...newRecord, balance: e.target.value })}
-      />
-      <input
-        type="number"
-        placeholder="Loaned"
-        value={newRecord.loaned}
-        onChange={(e) => setNewRecord({ ...newRecord, loaned: e.target.value })}
-      />
-      <input
-        type="number"
-        placeholder="Repaid"
-        value={newRecord.repaid}
-        onChange={(e) => setNewRecord({ ...newRecord, repaid: e.target.value })}
-      />
-      <input
-        type="number"
-        placeholder="Shares"
-        value={newRecord.shares}
-        onChange={(e) => setNewRecord({ ...newRecord, shares: e.target.value })}
-      />
-      <input
-        type="number"
-        placeholder="Interest"
-        value={newRecord.interest}
-        onChange={(e) => setNewRecord({ ...newRecord, interest: e.target.value })}
-      />
-      <button onClick={handleAddRecord}>Add Record</button>
+        {error && <p className="error">{error}</p>}
+        {loading ? (
+          <p>Loading financial records...</p>
+        ) : (
+          <div className="card">
+            <h2>Add Financial Record</h2>
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const newRecord = {
+                  user_id: e.target.user.value,
+                  month: e.target.month.value,
+                  year: e.target.year.value,
+                  paid_in: e.target.paid_in.value,
+                  balance: e.target.balance.value,
+                  loaned: e.target.loaned.value,
+                  repaid: e.target.repaid.value,
+                  shares: e.target.shares.value,
+                  interest: e.target.interest.value,
+                  category: e.target.category.value,
+                };
 
-      {/* Pass records to RecordTable */}
-      <RecordTable records={records} handleDeleteRecord={handleDeleteRecord} />
+                await handleAddRecord(newRecord);
+                e.target.reset();
+              }}
+            >
+              <div className="form-group">
+                <select name="user" required>
+                  <option value="">Select User</option>
+                  {users.map((user) => (
+                    <option key={user.id} value={user.id}>
+                      {user.username} ({user.email})
+                    </option>
+                  ))}
+                </select>
+                <select name="category" required>
+                  <option value="">Select Category</option>
+                  <option value="Burial and Development Fund">Burial and Development Fund</option>
+                  <option value="Education Fund">Education Fund</option>
+                </select>
+                <input type="text" name="month" placeholder="Month" required />
+                <input type="number" name="year" placeholder="Year" required />
+                <input type="number" name="paid_in" placeholder="Paid In" required />
+                <input type="number" name="balance" placeholder="Balance" required />
+                <input type="number" name="loaned" placeholder="Loaned" required />
+                <input type="number" name="repaid" placeholder="Repaid" required />
+                <input type="number" name="shares" placeholder="Shares" required />
+                <input type="number" name="interest" placeholder="Interest" required />
+                <button type="submit">Add Record</button>
+              </div>
+            </form>
+
+            <RecordTable records={records} users={users} onDelete={handleDeleteRecord} />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

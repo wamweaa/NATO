@@ -10,8 +10,8 @@ const Sidebar = () => {
       <li>
         <a href="#" className="active">Dashboard</a>
       </li>
-      <li><Link to="/DashboardForm">Financial records</Link></li>
-      <li><Link to="">User Management</Link></li>
+      <li><Link to="/Financialrecords">Financial records</Link></li>
+      <li><Link to="/usermanagement">User Management</Link></li>
       <li><Link to=""></Link></li>
 
     </ul>

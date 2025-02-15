@@ -6,8 +6,8 @@ import RegisterPage from './Pages/RegisterPage'
 import UserDashboardPage from './Pages/UserDashboardPage';
 import AdminDashboardPage from './Pages/AdminDashboardPage';
 import UserProfilePage from './Pages/UserProfilePage'
-import DashboardForm from './Dashboard/DashboardForm';
-
+import UserManagement from './Dashboard/UserManagement';
+import FinancialRecords from './Dashboard/FinancialRecords';
 function App() {
   return (
     <div>
@@ -19,7 +19,8 @@ function App() {
           <Route path='/user/dashboard' element={<UserDashboardPage/>}/>
           <Route path='/admin/dashboard' element={<AdminDashboardPage/>}/>
           <Route path='/profile' element={<UserProfilePage/>}/>
-          <Route path='/DashboardForm' element={<DashboardForm/>}/>
+          <Route path='/Financialrecords' element={<FinancialRecords/>}/>
+          <Route path='/usermanagement' element={<UserManagement/>}/>
         </Routes>
       </Router>
 
