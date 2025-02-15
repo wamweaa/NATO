@@ -8,7 +8,7 @@ const Sidebar = () => {
     <div className="logo">KNUT</div>
     <ul className="nav">
       <li>
-        <a href="#" className="active">Dashboard</a>
+        <Link to="">Dashboard</Link>
       </li>
       <li><Link to="/Financialrecords">Financial records</Link></li>
       <li><Link to="/usermanagement">User Management</Link></li>
