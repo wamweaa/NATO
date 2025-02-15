@@ -14,17 +14,17 @@ const RecordTable = ({ records, users, onDelete }) => {
           <th>Repaid</th>
           <th>Shares</th>
           <th>Interest</th>
+          <th>Category</th> {/* Show category */}
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         {records.length > 0 ? (
           records.map((record) => {
-            // Find the corresponding user by user_id
             const user = users.find((u) => u.id === record.user_id);
             return (
               <tr key={record.id}>
-                <td>{user ? user.email : "Unknown"}</td> {/* Display email */}
+                <td>{user ? user.email : "Unknown"}</td>
                 <td>{record.month}</td>
                 <td>{record.year}</td>
                 <td>{record.paid_in}</td>
@@ -33,6 +33,7 @@ const RecordTable = ({ records, users, onDelete }) => {
                 <td>{record.repaid}</td>
                 <td>{record.shares}</td>
                 <td>{record.interest}</td>
+                <td>{record.category || "N/A"}</td> {/* Show category */}
                 <td>
                   <button onClick={() => onDelete(record.id)}>Delete</button>
                 </td>
@@ -41,7 +42,7 @@ const RecordTable = ({ records, users, onDelete }) => {
           })
         ) : (
           <tr>
-            <td colSpan="10">No records available.</td>
+            <td colSpan="11">No records available.</td>
           </tr>
         )}
       </tbody>
