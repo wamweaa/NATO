@@ -40,16 +40,16 @@ const UserManagement = () => {
             <table className="users-table">
               <thead>
                 <tr>
-                  <th>ID</th>
+                  <th>TSC Number</th> {/* Changed from ID to TSC Number */}
                   <th>Username</th>
                   <th>Email</th>
                 </tr>
               </thead>
               <tbody>
                 {users.map((user) => (
-                  <tr key={user.id}>
-                    <td>{user.id}</td>
-                    <td>{user.username}</td>
+                  <tr key={user.tsc_number}> {/* Changed key from id to tsc_number */}
+                    <td>{user.tsc_number || "N/A"}</td> {/* Display TSC Number */}
+                    <td>{user.name || "N/A"}</td>  
                     <td>{user.email}</td>
                   </tr>
                 ))}
