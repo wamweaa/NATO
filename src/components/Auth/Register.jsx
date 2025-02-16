@@ -13,7 +13,7 @@ import {
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [tscNumber, setTscNumber] = useState("");
+  const [tscNumber, setTscNumber] = useState(""); // Holds TSC Number
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
@@ -27,7 +27,7 @@ const Register = () => {
       const response = await register({
         name,
         email,
-        tsc_number: tscNumber,
+        tsc_number: tscNumber, // Match backend field name
         password,
       });
 
@@ -126,8 +126,8 @@ const Register = () => {
         >
           Register
         </Button>
-        <Typography>
-          have an account <a href="/login">Login</a>
+        <Typography sx={{ mt: 2, textAlign: "center" }}>
+          Already have an account? <a href="/login">Login</a>
         </Typography>
       </form>
     </Box>
