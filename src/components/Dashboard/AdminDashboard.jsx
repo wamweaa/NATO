@@ -76,6 +76,7 @@ const AdminDashboard = () => {
                 <thead>
                   <tr>
                     <th>ID</th>
+                    <th>tsc_number</th>
                     <th>Month</th>
                     <th>Year</th>
                     <th>Paid In</th>
@@ -92,6 +93,7 @@ const AdminDashboard = () => {
                     <tr key={record.id}>
 
                       <td>{record.id}</td>
+                      <td>{record.tsc_number}</td>
                       <td>{record.month}</td>
                       <td>{record.year}</td>
                       <td>{record.paid_in}</td>

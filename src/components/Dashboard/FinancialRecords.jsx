@@ -7,6 +7,8 @@ import { IoIosSearch } from "react-icons/io";
 const FinancialRecords = () => {
   const [users, setUsers] = useState([]);
   const [records, setRecords] = useState([]);
+  const [filteredRecords, setFilteredRecords] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -23,6 +25,7 @@ const FinancialRecords = () => {
       ]);
       setUsers(usersResponse.data);
       setRecords(recordsResponse.data);
+      setFilteredRecords(recordsResponse.data); // Initially, show all records
     } catch (err) {
       setError("Failed to fetch data. Please try again.");
     } finally {
@@ -30,10 +33,31 @@ const FinancialRecords = () => {
     }
   };
 
+  const handleSearch = () => {
+    if (!searchQuery.trim()) {
+      setFilteredRecords(records); // Reset to all records if search is empty
+      return;
+    }
+  
+    const userTSCNumbers = users.reduce((acc, user) => {
+      acc[user.id] = user.tsc_number?.toString().trim().toLowerCase(); 
+      return acc;
+    }, {});
+  
+    const filtered = records.filter((record) => {
+      const userTSC = userTSCNumbers[record.user_id] || "";
+      return userTSC.includes(searchQuery.trim().toLowerCase());
+    });
+  
+    setFilteredRecords(filtered);
+  };
+  
+
   const handleAddRecord = async (newRecord) => {
     try {
       const response = await adminAddRecord(newRecord);
       setRecords((prevRecords) => [...prevRecords, response.data]);
+      setFilteredRecords((prevRecords) => [...prevRecords, response.data]);
     } catch (err) {
       setError("Failed to add record.");
     }
@@ -43,6 +67,7 @@ const FinancialRecords = () => {
     try {
       await adminDeleteRecord(id);
       setRecords((prevRecords) => prevRecords.filter((record) => record.id !== id));
+      setFilteredRecords((prevRecords) => prevRecords.filter((record) => record.id !== id));
     } catch (err) {
       setError("Failed to delete record.");
     }
@@ -107,11 +132,21 @@ const FinancialRecords = () => {
                 <button type="submit">Add Record</button>
               </div>
             </form>
+
             <div className="searchbar">
-              <input type="text" placeholder="serach for user and records " className="search-input" />
-              <button><IoIosSearch /></button>
+              <input
+                type="text"
+                placeholder="Search by TSC Number"
+                className="search-input"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <button onClick={handleSearch}>
+                <IoIosSearch />
+              </button>
             </div>
-            <RecordTable records={records} users={users} onDelete={handleDeleteRecord} />
+
+            <RecordTable records={filteredRecords} users={users} onDelete={handleDeleteRecord} />
           </div>
         )}
       </div>
