@@ -419,3 +419,39 @@
     font-weight: bold;
   }
 }
+.searchbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background-color: #f9f9f9;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 8px;
+  font-size: 16px;
+  background: transparent;
+}
+
+.searchbar button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 8px;
+  font-size: 18px;
+  color: #333;
+  display: flex;
+  align-items: center;
+}
+
+.searchbar button:hover {
+  color: #0c9231;
+}

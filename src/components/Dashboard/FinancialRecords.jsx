@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../Sharedc/Sidebar";
 import { getRecords, getAllUsers, adminAddRecord, adminDeleteRecord } from "../Services/api";
 import RecordTable from "../Sharedc/RecordTable";
+import { IoIosSearch } from "react-icons/io";
 
 const FinancialRecords = () => {
   const [users, setUsers] = useState([]);
@@ -106,7 +107,10 @@ const FinancialRecords = () => {
                 <button type="submit">Add Record</button>
               </div>
             </form>
-
+            <div className="searchbar">
+              <input type="text" placeholder="serach for user and records " className="search-input" />
+              <button><IoIosSearch /></button>
+            </div>
             <RecordTable records={records} users={users} onDelete={handleDeleteRecord} />
           </div>
         )}

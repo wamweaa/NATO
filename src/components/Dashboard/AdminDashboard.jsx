@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getAllUsers, getRecords } from "../Services/api";
 import Sidebar from "../Sharedc/Sidebar";
-
+import { IoIosSearch } from "react-icons/io";
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
   const [records, setRecords] = useState([]);
@@ -90,6 +90,7 @@ const AdminDashboard = () => {
                 <tbody>
                   {records.map((record) => (
                     <tr key={record.id}>
+
                       <td>{record.id}</td>
                       <td>{record.month}</td>
                       <td>{record.year}</td>

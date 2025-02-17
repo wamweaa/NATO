@@ -7,7 +7,7 @@ const RecordTable = ({ records, users, onDelete }) => {
       <table className="records-table">
         <thead>
           <tr>
-            <th>User Email</th>
+            <th>tsc_number</th>
             <th>Month</th>
             <th>Year</th>
             <th>Paid In</th>
@@ -26,7 +26,7 @@ const RecordTable = ({ records, users, onDelete }) => {
               const user = users.find((u) => u.id === record.user_id);
               return (
                 <tr key={record.id}>
-                  <td>{user ? user.email : "Unknown"}</td>
+                  <td>{user ? user.tsc_number : "Unknown"}</td>
                   <td>{record.month}</td>
                   <td>{record.year}</td>
                   <td>{record.paid_in}</td>
