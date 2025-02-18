@@ -2,7 +2,7 @@ import axios from 'axios'
 import { getToken } from './auth';
 import { Category } from '@mui/icons-material';
 const API = axios.create({
-  baseURL: 'http://127.0.0.1:5000/api'
+  baseURL: 'https://knut-backend-3.onrender.com/api'
 });
 
 // interceptor
