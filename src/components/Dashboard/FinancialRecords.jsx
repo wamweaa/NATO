@@ -112,7 +112,7 @@ const FinancialRecords = () => {
                   <option value="">Select User</option>
                   {users.map((user) => (
                     <option key={user.id} value={user.id}>
-                      {user.username} ({user.email})
+                      {user.username} ({user.tsc_number})
                     </option>
                   ))}
                 </select>
