@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getAllUsers, getRecords } from "../Services/api";
 import Sidebar from "../Sharedc/Sidebar";
-import { IoIosSearch } from "react-icons/io";
+import RecordTable from "../Sharedc/RecordTable";
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
   const [records, setRecords] = useState([]);
@@ -24,6 +24,10 @@ const AdminDashboard = () => {
 
     fetchData();
   }, []);
+
+  const handleDelete = (id) => {
+    setRecords(records.filter(record => record.id !== id));
+  };
 
   if (loading) return <p className="loading">Loading...</p>;
   if (error) return <p className="error">{error}</p>;
@@ -71,43 +75,7 @@ const AdminDashboard = () => {
 
           <section className="card">
             <h2>Financial Records</h2>
-            <div className="table-container">
-              <table className="data-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>tsc_number</th>
-                    <th>Month</th>
-                    <th>Year</th>
-                    <th>Paid In</th>
-                    <th>Balance</th>
-                    <th>Loaned</th>
-                    <th>Repaid</th>
-                    <th>Shares</th>
-                    <th>Interest</th>
-                    <th>Category</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {records.map((record) => (
-                    <tr key={record.id}>
-
-                      <td>{record.id}</td>
-                      <td>{record.tsc_number}</td>
-                      <td>{record.month}</td>
-                      <td>{record.year}</td>
-                      <td>{record.paid_in}</td>
-                      <td>{record.balance}</td>
-                      <td>{record.loaned}</td>
-                      <td>{record.repaid}</td>
-                      <td>{record.shares}</td>
-                      <td>{record.interest}</td>
-                      <td>{record.category}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <RecordTable records={records} users={users} onDelete={handleDelete} />
           </section>
         </div>
       </div>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { isAuthenticated, getToken } from '../Services/auth';
-// import Sidebar from '../Sharedc/Sidebar';
 
 const UserDashboard = () => {
   const [userDetails, setUserDetails] = useState({
@@ -18,7 +17,6 @@ const UserDashboard = () => {
     setSelectedCategory(event.target.value);
   };
 
-  // Fetch financial records filtered by category
   const fetchFilteredRecords = async (category) => {
     try {
       const token = getToken();
@@ -49,7 +47,6 @@ const UserDashboard = () => {
       try {
         const token = getToken();
 
-        // Fetch user details
         const userResponse = await fetch('http://127.0.0.1:5000/api/user/details', {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -57,7 +54,6 @@ const UserDashboard = () => {
         const userData = await userResponse.json();
         setUserDetails(userData);
 
-        // Fetch financial records
         fetchFilteredRecords(selectedCategory);
       } catch (err) {
         setError('Failed to fetch data. Please try again.');
@@ -71,14 +67,8 @@ const UserDashboard = () => {
 
   if (loading) return <div className="dashboard-loading">Loading...</div>;
 
-  // Calculate total loans, balance, and interest
-  const totalLoans = financialRecords.reduce((acc, record) => acc + record.loaned, 0);
-  const totalBalance = financialRecords.reduce((acc, record) => acc + record.balance, 0);
-  const totalInterest = financialRecords.reduce((acc, record) => acc + record.interest, 0);
-
   return (
     <div className="dashboard-container">
-      {/* <Sidebar /> */}
       <div className="dashboard-main">
         <header className="dashboard-header">
           <h2 className="dashboard-title">Hello, {userDetails.name}</h2>
@@ -86,13 +76,12 @@ const UserDashboard = () => {
         </header>
 
         <div className="filter-section">
-        <label>Filter by Category: </label>
-<select onChange={handleCategoryChange} value={selectedCategory}>
-  <option value="">All</option>
-  <option value="Burial and Development Fund">Burial and Development Fund</option>
-  <option value="Education Fund">Education Fund</option>
-</select>
-
+          <label>Filter by Category: </label>
+          <select onChange={handleCategoryChange} value={selectedCategory}>
+            <option value="">All</option>
+            <option value="Burial and Development Fund">Burial and Development Fund</option>
+            <option value="Education Fund">Education Fund</option>
+          </select>
         </div>
 
         <section className="account-info">
@@ -108,15 +97,15 @@ const UserDashboard = () => {
         <section className="financial-summary">
           <div className="summary-card">
             <h4>Total Loans</h4>
-            <p>KES {totalLoans.toFixed(2)}</p>
+            <p>KES {financialRecords.reduce((acc, record) => acc + record.loans.balance, 0).toFixed(2)}</p>
           </div>
           <div className="summary-card">
-            <h4>Total Balance</h4>
-            <p>KES {totalBalance.toFixed(2)}</p>
+            <h4>Total Shares Balance</h4>
+            <p>KES {financialRecords.reduce((acc, record) => acc + record.shares.balance, 0).toFixed(2)}</p>
           </div>
           <div className="summary-card">
-            <h4>Total Interest</h4>
-            <p>KES {totalInterest.toFixed(2)}</p>
+            <h4>Total Interest Balance</h4>
+            <p>KES {financialRecords.reduce((acc, record) => acc + record.interest.balance, 0).toFixed(2)}</p>
           </div>
         </section>
 
@@ -129,10 +118,14 @@ const UserDashboard = () => {
                   <th>Month</th>
                   <th>Year</th>
                   <th>Paid In</th>
-                  <th>Balance</th>
+                  <th>Shares Balance</th>
                   <th>Loaned</th>
                   <th>Repaid</th>
-                  <th>Interest</th>
+                  <th>Loan Balance</th>
+                  <th>Charged Interest</th>
+                  <th>Paid Interest</th>
+                  <th>Interest Balance</th>
+                  <th>Category</th>
                 </tr>
               </thead>
               <tbody>
@@ -140,11 +133,15 @@ const UserDashboard = () => {
                   <tr key={index}>
                     <td>{record.month}</td>
                     <td>{record.year}</td>
-                    <td>KES {record.paid_in.toFixed(2)}</td>
-                    <td>KES {record.balance.toFixed(2)}</td>
-                    <td>KES {record.loaned.toFixed(2)}</td>
-                    <td>KES {record.repaid.toFixed(2)}</td>
-                    <td>KES {record.interest.toFixed(2)}</td>
+                    <td>KES {record.shares.paid_in.toFixed(2)}</td>
+                    <td>KES {record.shares.balance.toFixed(2)}</td>
+                    <td>KES {record.shares.loaned.toFixed(2)}</td>
+                    <td>KES {record.loans.repaid.toFixed(2)}</td>
+                    <td>KES {record.loans.balance.toFixed(2)}</td>
+                    <td>KES {record.interest.charged_interest.toFixed(2)}</td>
+                    <td>KES {record.interest.paid_interest.toFixed(2)}</td>
+                    <td>KES {record.interest.balance.toFixed(2)}</td>
+                    <td>{record.category}</td>
                   </tr>
                 ))}
               </tbody>
